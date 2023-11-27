@@ -1,0 +1,99 @@
+﻿@page "/"
+
+@using Syncfusion.Blazor.Charts
+
+<SfChart Width="500">
+
+    <ChartPrimaryXAxis ValueType="Syncfusion.Blazor.Charts.ValueType.Category" />
+
+    <ChartSeriesCollection>
+        <ChartSeries DataSource="@MedalDetails" XName="X" YName="Y" Type="ChartSeriesType.StackingArea">
+        </ChartSeries>
+        <ChartSeries DataSource="@MedalDetails1" XName="X" YName="Y" Type="ChartSeriesType.StackingArea">
+        </ChartSeries>
+        <ChartSeries DataSource="@LineData" XName="X" YName="Y" Type="ChartSeriesType.Line" Fill="red" DashArray="5.5" Width="2">
+        </ChartSeries>
+    </ChartSeriesCollection>
+
+</SfChart>
+
+@code {
+
+    public bool IsEmpty = false;
+
+    public class ChartData
+    {
+        public double X { get; set; }
+        public double? Y { get; set; }
+
+    }
+
+    public List<ChartData> MedalDetails = new List<ChartData>
+    {
+        new ChartData{ X=2000, Y= 25 },
+        new ChartData{ X=2001, Y= 10 },
+        new ChartData{ X=2002, Y= 15 },
+        new ChartData{ X=2003, Y= null },
+        new ChartData{ X=2004, Y= 10 },
+        new ChartData{ X=2005, Y= 5 },
+        new ChartData{ X=2006, Y= 20 },
+        new ChartData{ X=2007, Y= 15 },
+        new ChartData{ X=2008, Y= 12 },
+        new ChartData{ X=2009, Y= null },
+        new ChartData{ X=2010, Y= 15 },
+        new ChartData{ X=2011, Y= 20 },
+    };
+    public List<ChartData> MedalDetails1 = new List<ChartData>
+    {
+        new ChartData{ X=2000, Y= 5 },
+        new ChartData{ X=2001, Y= 5 },
+        new ChartData{ X=2002, Y= 5 },
+        new ChartData{ X=2003, Y= null },
+        new ChartData{ X=2004, Y= 5 },
+        new ChartData{ X=2005, Y= 5 },
+        new ChartData{ X=2006, Y= 5 },
+        new ChartData{ X=2007, Y= 5 },
+        new ChartData{ X=2008, Y= 5 },
+        new ChartData{ X=2009, Y= null },
+        new ChartData{ X=2010, Y= 5 },
+        new ChartData{ X=2011, Y= 5 },
+
+    };
+
+    public List<ChartData> LineData = new List<ChartData> { };
+
+    protected override void OnInitialized()
+    {
+        for (int i = 0; i < MedalDetails.Count; i++)
+        {
+
+            if (MedalDetails[i].Y == null && MedalDetails1[i].Y == null)
+            {
+                IsEmpty = true;
+            }
+            else
+                IsEmpty = false;
+
+            if (IsEmpty)
+            {
+                if ((MedalDetails[i - 1].Y) != null)
+                {
+                    LineData.Add(new ChartData { X = MedalDetails[i - 1].X, Y = 0 });
+                    LineData.Add(new ChartData { X = MedalDetails[i - 1].X, Y = (MedalDetails[i - 1].Y + MedalDetails1[i - 1].Y) });
+                }
+
+                if ((MedalDetails1[i + 1].Y) != null)
+                {
+                    LineData.Add(new ChartData { X = MedalDetails[i + 1].X, Y = (MedalDetails[i + 1].Y + MedalDetails1[i + 1].Y) });
+                    LineData.Add(new ChartData { X = MedalDetails[i + 1].X, Y = 0 });
+                    LineData.Add(new ChartData { X = MedalDetails[i + 1].X, Y = double.NaN });
+
+                }
+
+            }
+        }
+
+    }
+
+}
+
