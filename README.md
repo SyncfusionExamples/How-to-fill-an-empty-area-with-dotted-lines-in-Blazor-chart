@@ -1,70 +1,62 @@
-# How-to-fill-an-empty-area-with-dotted-lines-in-Blazor-chart
- 
+# How to Fill Empty Areas with Dotted Lines in a Blazor Chart
 
-This article explains how to fill the empty area with dotted lines in [Blazor Chart Component ](https://www.syncfusion.com/blazor-components/blazor-charts)
+## Overview
 
-**Creating stacking series chart with empty points**
+This sample demonstrates how to fill empty regions in a Syncfusion [Blazor Charts](https://www.syncfusion.com/blazor-components/blazor-charts) visualization when stacking area series contain missing data points. The implementation uses two stacking area series and dynamically generates a separate line-series data source that is rendered with a dotted stroke across empty regions. This approach helps users visually identify missing data while preserving chart readability and continuity. The sample calculates boundary points from neighboring valid values and overlays a dotted line to represent the otherwise empty area.
 
-To demonstrate this, consider the [two stacking area series](https://help.syncfusion.com/cr/blazor/Syncfusion.Blazor.Charts.ChartSeriesType.html#Syncfusion_Blazor_Charts_ChartSeriesType_StackingArea). If it is populated data have a NaN or null, then it will be plotted as shown in the following image. 
+## Key Features
 
-![](/empty-points.png)
+- Uses `ChartSeriesType.StackingArea` to render multiple stacked area series.
+- Uses `ChartSeriesType.Line` to render a dotted-line overlay across empty regions.
+- Detects empty points by checking `null` values in the source data collections.
+- Creates a dedicated `LineData` collection during `OnInitialized()`.
+- Calculates line-series points from adjacent valid stacking-area values.
+- Adds calculated points only when empty regions are identified.
+- Uses `double.NaN` to break line segments and prevent unwanted connections between dotted sections.
+- Binds chart data through strongly typed data collections.
+- Demonstrates custom visualization of missing values without modifying the original area-series data.
 
-**Filling the empty points with dotted line**
+## Prerequisites
 
-In order to fill this empty space with dotted lines, use [Line Series](https://www.syncfusion.com/blazor-components/blazor-charts/chart-types/line-chart) with calculated data from two stacking area series’s data collection as shown in the following code sample. 
+- [Visual Studio 2022](https://visualstudio.microsoft.com/vs/) or [Visual Studio Code](https://code.visualstudio.com/)
+- [.NET SDK](https://dotnet.microsoft.com/en-us/download/dotnet) compatible with the project's target framework
 
-**Index.razor**
+## How to Run the Project
 
-```cshtml
+**Visual Studio 2022**
 
-    public List<ChartData> LineData = new List<ChartData> { };
+1. Clone or download this repository.
+2. Open the project file:
+   - `DottelLine/DottelLine.csproj`
+3. Restore NuGet packages.
+4. Build the project.
+5. Run the application using `Ctrl+F5`.
 
-    protected override void OnInitialized()
-    {
-        for ( int i = 0; i < MedalDetails.Count; i++)
-        {
+**Visual Studio Code**
 
-            if (MedalDetails[i].Y == null && MedalDetails1[i].Y == null)
-            {
-                IsEmpty = true;
-            }
-            else
-            {
-                IsEmpty = false;
-            }                
+1. Clone or download this repository.
+2. Open the repository folder in Visual Studio Code.
+3. Open the integrated terminal.
+4. Navigate to the project directory.
 
-            if (IsEmpty)
-            {
-                if ((MedalDetails[i - 1].Y)!=null)
-                {
-                    LineData.Add(new ChartData{X = MedalDetails[i - 1].X,Y = 0});
-                    LineData.Add(new ChartData { X = MedalDetails[i - 1].X, Y = (MedalDetails[i - 1].Y + MedalDetails1[i - 1].Y)});
-                }
-
-                if ( (MedalDetails1[i + 1].Y)!=null)
-                {
-                    LineData.Add(new ChartData { X = MedalDetails[i + 1].X, Y = (MedalDetails[i + 1].Y + MedalDetails1[i + 1].Y)});
-                    LineData.Add(new ChartData { X = MedalDetails[i + 1].X, Y = 0 });
-                    LineData.Add(new ChartData { X = MedalDetails[i + 1].X, Y = double.NaN });
-                }
-            }                                                                                               
-        }
-    }
-
+```bash
+cd DottelLine
+dotnet restore
+dotnet run
 ```
 
-**Empty points with dotted line**
+5. Open the application using the local URL displayed in the terminal after the application starts.
 
-![](/empty-points-with-dotted-line.png)
+## Project Structure
 
-[View the sample in GitHub](https://github.com/SyncfusionExamples/How-to-fill-an-empty-area-with-dotted-lines-in-Blazor-chart)
+`Pages/Index.razor` - Main sample page containing the chart implementation, stacking area series configuration, empty-point detection logic, calculated line-series generation, and dotted-line visualization.
 
-**Conclusion**
+## Support and Feedback
 
-I hope you enjoyed learning how to fill the empty area with dotted line in Blazor Chart Component.
+- For general product questions, visit the [Syncfusion Community Forum](https://www.syncfusion.com/forums) or [Syncfusion Support](https://www.syncfusion.com/support).
+- To report an issue specific to this sample, open a GitHub issue in this repository.
+- Review the official Blazor Chart documentation: https://help.syncfusion.com/chart-sdk/blazor/charts/getting-started
 
-You can refer to our [Blazor Chart feature tour](https://www.syncfusion.com/blazor-components/blazor-charts) page to know about its other groundbreaking feature representations and [documentation](https://blazor.syncfusion.com/documentation/chart/getting-started), and how to quickly get started for configuration specifications. You can also explore our [Blazor Chart example](https://blazor.syncfusion.com/demos/chart/line?theme=bootstrap5) to understand how to create and manipulate data.
+## License
 
-For current customers, you can check out our components from the [License and Downloads](https://www.syncfusion.com/sales/teamlicense) page. If you are new to Syncfusion, you can try our 30-day [free trial](https://www.syncfusion.com/downloads/blazor) to check out our other controls.
-
-If you have any queries or require clarifications, please let us know in the comments section below. You can also contact us through our [support forums](https://www.syncfusion.com/forums), [support portal](https://support.syncfusion.com/create), or [feedback portal](https://www.syncfusion.com/feedback/blazor-components?control=charts). We are always happy to assist you!
+This is a Syncfusion sample project provided to demonstrate product usage. Review the [Syncfusion license terms](https://www.syncfusion.com/sales/pricing?category=ui-components) before using Syncfusion components in your own applications.
