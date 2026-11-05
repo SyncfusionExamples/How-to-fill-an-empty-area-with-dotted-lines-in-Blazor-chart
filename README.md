@@ -13,7 +13,7 @@ To demonstrate this, consider the [two stacking area series](https://help.syncfu
 
 In order to fill this empty space with dotted lines, use [Line Series](https://www.syncfusion.com/blazor-components/blazor-charts/chart-types/line-chart) with calculated data from two stacking area series’s data collection as shown in the following code sample. 
 
-**Index.razor**
+**Home.razor** (.NET 10 Blazor Web App, `Components/Pages/Home.razor`)
 
 ```cshtml
 
